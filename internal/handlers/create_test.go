@@ -20,37 +20,61 @@ func TestCreateRequest(t *testing.T) {
 			input: `{
 				"name":"Test Co.",
 				"description":"This is a test company.",
-				"employees":100,"registered":true,
+				"employee_count":100,"registered":true,
 				"company_type":"Corporations"
 			}`,
 			wantCode: http.StatusCreated,
 		},
 		{
-			name:     "CompleteValidRequestNoDescription",
-			input:    `{"name":"Test Co.","employees":100,"registered":true,"company_type":"Corporations"}`,
+			name: "CompleteValidRequestNoDescription",
+			input: `{
+				"name":"Test Co.",
+				"employee_count":100,
+				"registered":true,
+				"company_type":"Corporations"
+			}`,
 			wantCode: http.StatusCreated,
 		},
 		{
 			name: "InvalidCompanyType",
-			input: `{"name":"Test Co.","description":"This is a test company.","employees":100,"registered":true,
-"company_type":"Invalid"}`,
+			input: `{
+				"name":"Test Co.",
+				"description":"This is a test company.",
+				"employee_count":100,
+				"registered":true,
+				"company_type":"Invalid"
+			}`,
 			wantCode: http.StatusBadRequest,
 		},
 		{
 			name: "NameTooLong",
-			input: `{"name":"A very long company name that exceeds the character limit","description":
-"This is a test company.","employees":100,"registered":true,"company_type":"Corporations"}`,
+			input: `{
+				"name":"A very long company name that exceeds the character limit",
+				"description": "This is a test company.",
+				"employee_count":100,
+				"registered":true,
+				"company_type":"Corporations"
+			}`,
 			wantCode: http.StatusBadRequest,
 		},
 		{
-			name:     "NoNumEmployees",
-			input:    `{"name":"Test Co.","registered":false,"company_type":"Corporations"}`,
+			name: "NoNumEmployee_count",
+			input: `{
+				"name":"Test Co.",
+				"registered":false,
+				"company_type":"Corporations"
+			}`,
 			wantCode: http.StatusBadRequest,
 		},
 		{
-			name: "WrongNumEmployeesType",
-			input: `{"name":"Test Co.","description":"This is a test company.","employees":"100","registered":true,
-"company_type":"Corporations"}`,
+			name: "WrongNumEmployee_countType",
+			input: `{
+				"name":"Test Co.",
+				"description":"This is a test company.",
+				"employee_count":"100",
+				"registered":true,
+				"company_type":"Corporations"
+			}`,
 			wantCode: http.StatusBadRequest,
 		},
 	}

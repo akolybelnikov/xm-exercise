@@ -1,0 +1,34 @@
+# Ignore .git directory
+.git
+
+# Ignore Dockerfile itself
+Dockerfile
+
+# Ignore docker-compose.yml itself
+docker-compose.yml
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore build directories
+bin
+
+# Ignore various cache and temporary files
+*.swp
+*.swo
+*.DS_Store
+*.~*
+
+# Ignore IDE-specific directories and files (example for JetBrains IDEs)
+.idea/
+*.iml
+
+# Ignore specific migrations folder if you want to exclude it
+#migrations/
+
+# Ignore other potential sensitive or temporary files
+.env

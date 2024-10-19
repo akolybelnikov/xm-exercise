@@ -6,11 +6,11 @@ import (
 )
 
 type CreateRequest struct {
-	Name         string `json:"name" validate:"required,max=15"`
-	Description  string `json:"description" validate:"max=3000"`
-	NumEmployees int    `json:"employees" validate:"required"`
-	Registered   bool   `json:"registered" validate:"required"`
-	CompanyType  string `json:"company_type" validate:"required,oneof='Corporations' 'NonProfit' 'Cooperative' 'Sole Proprietorship'"` //nolint:lll
+	Name          string `json:"name" validate:"required,max=15"`
+	Description   string `json:"description" validate:"max=3000"`
+	EmployeeCount int    `json:"employee_count" validate:"required"`
+	Registered    bool   `json:"registered" validate:"required"`
+	CompanyType   string `json:"company_type" validate:"required,oneof='Corporations' 'NonProfit' 'Cooperative' 'Sole Proprietorship'"` //nolint:lll
 }
 
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {

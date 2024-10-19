@@ -24,7 +24,7 @@ func setUpTestingDB(t *testing.T) (repository.CompanyRepository, func()) {
 		Name:     "postgres",
 		SSLMode:  "disable",
 	}
-	repo, err := repository.NewPGXCompanyRepository(cfg)
+	repo, err := repository.NewPostgresCompanyRepository(cfg)
 	require.NoError(t, err)
 
 	ctx := context.Background()

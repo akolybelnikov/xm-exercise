@@ -18,14 +18,14 @@ type CompanyRepository interface {
 	DeleteCompany(ctx context.Context, id string) error
 }
 
-// PGXCompanyRepository is a Postgresql implementation of CompanyRepository using pgx.
-type PGXCompanyRepository struct {
+// PostgresCompanyRepository is a Postgresql implementation of CompanyRepository using pgx.
+type PostgresCompanyRepository struct {
 	DB   *db.Queries
 	Pool *pgxpool.Pool
 }
 
-// NewPGXCompanyRepository creates a new instance of PGXCompanyRepository.
-func NewPGXCompanyRepository(cfg *config.DBConfig) (*PGXCompanyRepository, error) {
+// NewPostgresCompanyRepository creates a new instance of PostgresCompanyRepository.
+func NewPostgresCompanyRepository(cfg *config.DBConfig) (*PostgresCompanyRepository, error) {
 	dbConfig, err := pgxpool.ParseConfig(cfg.GetDSN())
 	if err != nil {
 		return nil, errors.New("Error parsing the database config: " + err.Error())
@@ -38,5 +38,5 @@ func NewPGXCompanyRepository(cfg *config.DBConfig) (*PGXCompanyRepository, error
 
 	queries := db.New(pool)
 
-	return &PGXCompanyRepository{DB: queries, Pool: pool}, nil
+	return &PostgresCompanyRepository{DB: queries, Pool: pool}, nil
 }

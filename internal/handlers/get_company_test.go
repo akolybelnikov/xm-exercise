@@ -28,7 +28,8 @@ func TestGetRequest(t *testing.T) {
 			}
 
 			rec := httptest.NewRecorder()
-			h := handlers.NewHandler()
+			s := new(mockCompanyService)
+			h := handlers.NewHandler(s)
 			r := chi.NewRouter()
 			r.Get("/{id}", h.Delete)
 

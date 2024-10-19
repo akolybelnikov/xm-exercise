@@ -11,7 +11,7 @@ import (
 	"github.com/akolybelnikov/xm-exercise/internal/models"
 )
 
-func (r *PGXCompanyRepository) UpdateCompany(ctx context.Context, request *models.UpdateRequest) error {
+func (r *PostgresCompanyRepository) UpdateCompany(ctx context.Context, request *models.UpdateRequest) error {
 	pgUUID, err := ConvertStringToUUID(request.ID)
 	if err != nil {
 		return errors.New("Error scanning the ID: " + err.Error())

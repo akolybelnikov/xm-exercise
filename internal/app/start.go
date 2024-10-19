@@ -16,13 +16,13 @@ import (
 
 func Run(cfg *config.Config) error {
 	// Initialize database
-	_, dbErr := repository.NewPGXCompanyRepository(&cfg.DB)
+	repo, dbErr := repository.NewPostgresCompanyRepository(&cfg.DB)
 	if dbErr != nil {
 		return dbErr
 	}
 
 	// Create router
-	r := NewRouter()
+	r := NewRouter(repo)
 
 	// Start server
 	srv := &http.Server{

@@ -93,8 +93,8 @@ func TestCompanyByID(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			// MockCompanyRepo is a mock implementation of the CompanyRepository interface.
 			m := new(MockCompanyRepo)
-			// NewCompanyService creates a new CompanyService.
-			s := services.NewCompanyService(m)
+			// NewCompanyDataService creates a new CompanyDataService.
+			s := services.NewCompanyDataService(m)
 			m.On("GetCompanyByID", mock.Anything, test.id).Return(test.result, test.err)
 			resp, err2 := s.GetCompanyByID(context.Background(), test.id)
 			assert.Equal(t, test.result, resp)
@@ -136,8 +136,8 @@ func TestCreateCompany(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			// MockCompanyRepo is a mock implementation of the CompanyRepository interface.
 			m := new(MockCompanyRepo)
-			// NewCompanyService creates a new CompanyService.
-			s := services.NewCompanyService(m)
+			// NewCompanyDataService creates a new CompanyDataService.
+			s := services.NewCompanyDataService(m)
 			m.On("CreateCompany", mock.Anything, test.req).Return(test.id, test.err)
 			resp, err := s.CreateCompany(context.Background(), test.req)
 			assert.Equal(t, test.id, resp)
@@ -147,7 +147,7 @@ func TestCreateCompany(t *testing.T) {
 	}
 }
 
-// TestUpdateCompany tests the update functionality of CompanyService.
+// TestUpdateCompany tests the update functionality of CompanyDataService.
 func TestUpdateCompany(t *testing.T) {
 	testCases := []struct {
 		name string
@@ -170,8 +170,8 @@ func TestUpdateCompany(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			// MockCompanyRepo is a mock implementation of the CompanyRepository interface.
 			m := new(MockCompanyRepo)
-			// NewCompanyService creates a new CompanyService.
-			s := services.NewCompanyService(m)
+			// NewCompanyDataService creates a new CompanyDataService.
+			s := services.NewCompanyDataService(m)
 			m.On("UpdateCompany", mock.Anything, test.req).Return(test.err)
 			err := s.UpdateCompany(context.Background(), test.req)
 			assert.Equal(t, test.err, err)
@@ -180,7 +180,7 @@ func TestUpdateCompany(t *testing.T) {
 	}
 }
 
-// TestDeleteCompany tests the DeleteCompany method of the CompanyService.
+// TestDeleteCompany tests the DeleteCompany method of the CompanyDataService.
 func TestDeleteCompany(t *testing.T) {
 	testCases := []struct {
 		name string
@@ -195,8 +195,8 @@ func TestDeleteCompany(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			// MockCompanyRepo is a mock implementation of the CompanyRepository interface.
 			m := new(MockCompanyRepo)
-			// NewCompanyService creates a new CompanyService.
-			s := services.NewCompanyService(m)
+			// NewCompanyDataService creates a new CompanyDataService.
+			s := services.NewCompanyDataService(m)
 			m.On("DeleteCompany", mock.Anything, test.id).Return(test.err)
 			err := s.DeleteCompany(context.Background(), test.id)
 			assert.Equal(t, test.err, err)

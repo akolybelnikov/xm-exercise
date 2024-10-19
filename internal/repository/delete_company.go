@@ -5,7 +5,7 @@ import (
 	"errors"
 )
 
-func (r *PGXCompanyRepository) DeleteCompany(ctx context.Context, id string) error {
+func (r *PostgresCompanyRepository) DeleteCompany(ctx context.Context, id string) error {
 	pgUUID, convertErr := ConvertStringToUUID(id)
 	if convertErr != nil {
 		return errors.New("could not convert string to uuid")

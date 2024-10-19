@@ -29,7 +29,8 @@ func TestDeleteRequest(t *testing.T) {
 			}
 
 			rec := httptest.NewRecorder()
-			h := handlers.NewHandler()
+			s := new(mockCompanyService)
+			h := handlers.NewHandler(s)
 			r := chi.NewRouter()
 			r.Delete("/delete/{id}", h.Delete)
 

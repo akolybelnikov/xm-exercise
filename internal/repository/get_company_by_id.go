@@ -11,7 +11,7 @@ import (
 )
 
 // GetCompanyByID returns a company by its ID.
-func (r *PGXCompanyRepository) GetCompanyByID(ctx context.Context, id string) (*db.Company, error) {
+func (r *PostgresCompanyRepository) GetCompanyByID(ctx context.Context, id string) (*db.Company, error) {
 	// convert string id to pgtype.UUID
 	pgUUID, err := ConvertStringToUUID(id)
 	if err != nil {

@@ -12,7 +12,7 @@ import (
 )
 
 // CreateCompany creates a new company.
-func (r *PGXCompanyRepository) CreateCompany(ctx context.Context, request *models.CreateRequest) (string, error) {
+func (r *PostgresCompanyRepository) CreateCompany(ctx context.Context, request *models.CreateRequest) (string, error) {
 	// convert request.Description to pgtype.Text
 	pgText, convertErr := ConvertToText(request.Description)
 	if convertErr != nil {

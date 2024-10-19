@@ -2,12 +2,15 @@ package app
 
 import (
 	"github.com/akolybelnikov/xm-exercise/internal/handlers"
+	"github.com/akolybelnikov/xm-exercise/internal/repository"
+	"github.com/akolybelnikov/xm-exercise/internal/services"
 	"github.com/go-chi/chi/v5"
 )
 
-func NewRouter() *chi.Mux {
+func NewRouter(repo repository.CompanyRepository) *chi.Mux {
 	r := chi.NewRouter()
-	h := handlers.NewHandler()
+	s := services.NewCompanyDataService(repo)
+	h := handlers.NewHandler(s)
 
 	r.Route("/api/v1/companies", func(r chi.Router) {
 		r.Post("/create", h.Create)

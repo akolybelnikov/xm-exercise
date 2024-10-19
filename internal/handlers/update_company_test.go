@@ -66,7 +66,8 @@ func TestPatchRequest(t *testing.T) {
 			}
 
 			rec := httptest.NewRecorder()
-			h := handlers.NewHandler()
+			s := new(mockCompanyService)
+			h := handlers.NewHandler(s)
 			handler := http.HandlerFunc(h.Patch)
 
 			handler.ServeHTTP(rec, req)

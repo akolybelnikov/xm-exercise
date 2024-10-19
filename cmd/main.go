@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 
 	"github.com/akolybelnikov/xm-exercise/internal/app"
@@ -14,10 +15,10 @@ func main() {
 	// Load the configuration
 	cfg, cfgErr := config.NewConfig(env)
 	if cfgErr != nil {
-		panic(cfgErr)
+		log.Fatalln("Error loading the configuration: ", cfgErr)
 	}
 	// Run the main function of the application
 	if err := app.Run(cfg); err != nil {
-		panic(err)
+		log.Fatalln("Error running the application: ", err)
 	}
 }

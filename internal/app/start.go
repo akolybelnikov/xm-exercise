@@ -9,10 +9,18 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/akolybelnikov/xm-exercise/internal/repository"
+
 	"github.com/akolybelnikov/xm-exercise/internal/config"
 )
 
 func Run(cfg *config.Config) error {
+	// Initialize database
+	_, dbErr := repository.NewPGXCompanyRepository(&cfg.DB)
+	if dbErr != nil {
+		return dbErr
+	}
+
 	// Create router
 	r := NewRouter()
 

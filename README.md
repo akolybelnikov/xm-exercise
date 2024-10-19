@@ -64,6 +64,9 @@ This project implements a REST API to manage companies. The API allows clients t
 
 ## Running the Project with Docker Compose
 
+This will initialize a Docker container with the application running inside it, and a Postgres database for data storage. 
+The application will be accessible at `http://localhost:8080`. The Postgres database will be initialized with the DDL.
+
 1. **Start the Docker container:**
 
     ```sh

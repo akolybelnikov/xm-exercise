@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// Get the environment name from the environment variable
-	env := os.Getenv("ENV")
+	env := os.Getenv("APP_ENV")
 	// Load the configuration
 	cfg, cfgErr := config.NewConfig(env)
 	if cfgErr != nil {

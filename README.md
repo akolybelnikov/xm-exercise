@@ -61,17 +61,14 @@ This project implements a REST API to manage companies. The API allows clients t
 
     This will remove the project build.
 
-## Stopping the Application
-
-To stop the running application, use:
-
-```sh
-make stop
-```
-
 ## Configuration
 
-Make sure to customize any configuration parameters based on your environment and requirements. Common configurations might include database connection strings, server ports, and logging levels.
+The application uses environment variables and static YML files for configuration. As a minimum, the `APP_ENV` 
+environment variable must be set to `dev` for the configuration to be loaded correctly in the development environment.
+
+The static configuration files are located in the `config` directory. The configuration files are loaded based on the
+name of the file and the value of the `APP_ENV` environment variable. For example, the `config/dev.yml` file will be
+loaded when the `APP_ENV` environment variable is set to `dev`.
 
 ## Usage
 

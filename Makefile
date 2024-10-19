@@ -8,11 +8,11 @@ setup:
 
 # Build the project
 build:
-	go build -o ./bin/myapp ./cmd
+	go build -o ./bin/app ./cmd
 
 # Run the application
 run: build
-	./bin/myapp
+	./bin/app
 
 # Run the linter
 lint:

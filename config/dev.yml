@@ -1,0 +1,4 @@
+app:
+  timeout: 10
+  idle_timeout: 15
+  wait_timeout: 30

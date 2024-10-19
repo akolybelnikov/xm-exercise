@@ -13,11 +13,9 @@ import (
 
 // TestGetCompanyByID tests the GetCompanyByID method.
 func TestGetCompanyByID(t *testing.T) {
-	t.Parallel()
 	repo, teardown := setUpTestingDB(t)
 	defer teardown()
 
-	// Create a new company
 	// Create a new company
 	id, err := repo.CreateCompany(context.Background(), &models.CreateRequest{
 		Name:          "Test Co.",
@@ -40,7 +38,6 @@ func TestGetCompanyByID(t *testing.T) {
 
 // TestGetCompanyByIDNotFound tests the GetCompanyByID method with a non-existent ID.
 func TestGetCompanyByIDNotFound(t *testing.T) {
-	t.Parallel()
 	repo, teardown := setUpTestingDB(t)
 	defer teardown()
 

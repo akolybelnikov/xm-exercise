@@ -61,7 +61,6 @@ func setUpTestingDB(t *testing.T) (repository.CompanyRepository, func()) {
 
 // TestCreateCompany tests the CreateCompany method.
 func TestCreateCompany(t *testing.T) {
-	t.Parallel()
 	repo, teardown := setUpTestingDB(t)
 	defer teardown()
 
@@ -87,7 +86,6 @@ func TestCreateCompany(t *testing.T) {
 
 // TestCreateCompanyInvalidType tests the CreateCompany method with an invalid company type.
 func TestCreateCompanyInvalidType(t *testing.T) {
-	t.Parallel()
 	repo, teardown := setUpTestingDB(t)
 	defer teardown()
 
@@ -104,7 +102,6 @@ func TestCreateCompanyInvalidType(t *testing.T) {
 
 // TestCreateCompanyNameTooLong tests the CreateCompany method with a name that is too long.
 func TestCreateCompanyNameTooLong(t *testing.T) {
-	t.Parallel()
 	repo, teardown := setUpTestingDB(t)
 	defer teardown()
 
@@ -121,7 +118,6 @@ func TestCreateCompanyNameTooLong(t *testing.T) {
 
 // TestCreateCompanyNonUniqueName tests the CreateCompany method with a non-unique name.
 func TestCreateCompanyNonUniqueName(t *testing.T) {
-	t.Parallel()
 	repo, teardown := setUpTestingDB(t)
 	defer teardown()
 

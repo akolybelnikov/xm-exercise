@@ -10,7 +10,6 @@ import (
 
 // TestUpdateCompany tests the UpdateCompany method.
 func TestUpdateCompany(t *testing.T) {
-	t.Parallel()
 	repo, teardown := setUpTestingDB(t)
 	defer teardown()
 
@@ -46,7 +45,6 @@ func TestUpdateCompany(t *testing.T) {
 
 // TestUpdateCompanyNotFound tests the UpdateCompany method with a non-existent ID.
 func TestUpdateCompanyNotFound(t *testing.T) {
-	t.Parallel()
 	repo, teardown := setUpTestingDB(t)
 	defer teardown()
 
@@ -60,7 +58,6 @@ func TestUpdateCompanyNotFound(t *testing.T) {
 
 // TestUpdateCompanySetCountToZero tests the UpdateCompany method with setting the employee count to zero.
 func TestUpdateCompanySetCountToZero(t *testing.T) {
-	t.Parallel()
 	repo, teardown := setUpTestingDB(t)
 	defer teardown()
 

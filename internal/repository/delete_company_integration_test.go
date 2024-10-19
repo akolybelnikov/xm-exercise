@@ -10,7 +10,6 @@ import (
 
 // TestDeleteCompany tests the DeleteCompany method.
 func TestDeleteCompany(t *testing.T) {
-	t.Parallel()
 	repo, teardown := setUpTestingDB(t)
 	defer teardown()
 
@@ -36,7 +35,6 @@ func TestDeleteCompany(t *testing.T) {
 
 // TestDeleteCompanyNotFound tests the DeleteCompany method with a non-existent ID.
 func TestDeleteCompanyNotFound(t *testing.T) {
-	t.Parallel()
 	repo, teardown := setUpTestingDB(t)
 	defer teardown()
 

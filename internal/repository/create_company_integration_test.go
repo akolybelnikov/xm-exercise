@@ -28,8 +28,9 @@ func setUpTestingDB(t *testing.T) (repository.CompanyRepository, func()) {
 
 	// create the table in the database
 	_, ddlErr := repo.Pool.Exec(ctx, `
+	DROP TABLE IF EXISTS company;	
+	DROP EXTENSION IF EXISTS "uuid-ossp";
 	CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-	
 	CREATE TABLE IF NOT EXISTS company (
 	  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
 	  name VARCHAR(15) UNIQUE NOT NULL,

@@ -18,11 +18,11 @@ func Run(cfg *config.Config) error {
 
 	// Start server
 	srv := &http.Server{
-		Addr:         ":8080",
+		Addr:         ":" + cfg.App.Port,
 		Handler:      r,
 		ReadTimeout:  time.Duration(cfg.App.Timeout) * time.Second,
 		WriteTimeout: time.Duration(cfg.App.Timeout) * time.Second,
-		IdleTimeout:  time.Duration(cfg.App.Idle) * time.Second,
+		IdleTimeout:  time.Duration(cfg.App.IdleTimeout) * time.Second,
 	}
 
 	go func() {
@@ -31,8 +31,10 @@ func Run(cfg *config.Config) error {
 		}
 	}()
 
+	log.Println("Server started on port " + cfg.App.Port)
+
 	// Graceful shutdown
-	return gracefulShutdown(srv, cfg.App.Wait)
+	return gracefulShutdown(srv, cfg.App.WaitTimeout)
 }
 
 func gracefulShutdown(srv *http.Server, waitTimeout int) error {

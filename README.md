@@ -24,7 +24,8 @@ This project implements a REST API to manage companies. The API allows clients t
     ```
 
 
-## Building the Project
+
+## Building and Running the Project Locally
 
 1. **Build the project:**
 
@@ -60,6 +61,19 @@ This project implements a REST API to manage companies. The API allows clients t
     ```
 
     This will remove the project build.
+
+## Running the Project with Docker Compose
+
+1. **Start the Docker container:**
+
+    ```sh
+    docker compose up -d
+    ```
+2. **Stop the Docker container:**
+
+    ```sh
+    docker compose down
+    ```
 
 ## Configuration
 

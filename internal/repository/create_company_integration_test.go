@@ -26,6 +26,21 @@ func setUpTestingDB(t *testing.T) (repository.CompanyRepository, func()) {
 
 	ctx := context.Background()
 
+	// create the table in the database
+	_, ddlErr := repo.Pool.Exec(ctx, `
+	CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+	
+	CREATE TABLE IF NOT EXISTS company (
+	  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+	  name VARCHAR(15) UNIQUE NOT NULL,
+	  description VARCHAR(3000),
+	  employee_count INT NOT NULL,
+	  registered BOOLEAN NOT NULL,
+	  type VARCHAR(20) NOT NULL CHECK ( type IN ('Corporations', 'NonProfit', 'Cooperative', 'Sole Proprietorship') )
+	);
+`)
+	require.NoError(t, ddlErr)
+
 	// begin transaction
 	tx, err := repo.Pool.Begin(ctx)
 	require.NoError(t, err)

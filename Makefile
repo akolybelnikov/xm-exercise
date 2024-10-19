@@ -20,7 +20,11 @@ lint:
 
 # Run the tests
 test:
-	go test -v ./...
+	go test -tags=integration -v ./...
+
+# Run the unit tests
+test-unit:
+	go test -tags="" -v ./...
 
 # Run the tests with coverage
 test-coverage:

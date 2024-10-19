@@ -22,7 +22,7 @@ func TestPatchRequest(t *testing.T) {
 				"name": "Test Corp",
 				"description": "This is a test corporation",
 				"employees": 100,
-				"registered": true,
+				"registered": "true",
 				"company_type": "Corporations"
 			}`,
 			wantCode: http.StatusOK,
@@ -39,7 +39,7 @@ func TestPatchRequest(t *testing.T) {
 				"name": "Invalid Corp",
 				"description": "Corporation with invalid type",
 				"employees": 50,
-				"registered": false,
+				"registered": "false",
 				"company_type": "InvalidType"
 			}`,
 			wantCode: http.StatusBadRequest,
@@ -51,7 +51,7 @@ func TestPatchRequest(t *testing.T) {
 				"name": "A very long corporation name that exceeds the character limit",
 				"description": "This is a test corporation",
 				"employees": 100,
-				"registered": true,
+				"registered": "true",
 				"company_type": "Corporations"
 			}`,
 			wantCode: http.StatusBadRequest,

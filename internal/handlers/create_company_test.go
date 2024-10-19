@@ -20,7 +20,8 @@ func TestCreateRequest(t *testing.T) {
 			input: `{
 				"name":"Test Co.",
 				"description":"This is a test company.",
-				"employee_count":100,"registered":true,
+				"employee_count":100,
+				"registered":"true",
 				"company_type":"Corporations"
 			}`,
 			wantCode: http.StatusCreated,
@@ -30,7 +31,7 @@ func TestCreateRequest(t *testing.T) {
 			input: `{
 				"name":"Test Co.",
 				"employee_count":100,
-				"registered":true,
+				"registered":"true",
 				"company_type":"Corporations"
 			}`,
 			wantCode: http.StatusCreated,
@@ -41,7 +42,7 @@ func TestCreateRequest(t *testing.T) {
 				"name":"Test Co.",
 				"description":"This is a test company.",
 				"employee_count":100,
-				"registered":true,
+				"registered":"true",
 				"company_type":"Invalid"
 			}`,
 			wantCode: http.StatusBadRequest,
@@ -52,7 +53,7 @@ func TestCreateRequest(t *testing.T) {
 				"name":"A very long company name that exceeds the character limit",
 				"description": "This is a test company.",
 				"employee_count":100,
-				"registered":true,
+				"registered":"true",
 				"company_type":"Corporations"
 			}`,
 			wantCode: http.StatusBadRequest,
@@ -61,7 +62,7 @@ func TestCreateRequest(t *testing.T) {
 			name: "NoNumEmployee_count",
 			input: `{
 				"name":"Test Co.",
-				"registered":false,
+				"registered":"false",
 				"company_type":"Corporations"
 			}`,
 			wantCode: http.StatusBadRequest,
@@ -72,7 +73,7 @@ func TestCreateRequest(t *testing.T) {
 				"name":"Test Co.",
 				"description":"This is a test company.",
 				"employee_count":"100",
-				"registered":true,
+				"registered":"true",
 				"company_type":"Corporations"
 			}`,
 			wantCode: http.StatusBadRequest,

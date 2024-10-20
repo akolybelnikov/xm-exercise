@@ -89,28 +89,17 @@ The application will be accessible at `http://localhost:8080`. The Postgres data
     ```
    This will run the unit tests in the project, if you prefer to run only the unit tests.
 
-## Usage
-
-Once the application is running, you can interact with the API to perform operations on company records. Typical
-operations include:
-
-- **Login to the application to obtain a valid JWT token**
-- **Create a new company record**
-- **Retrieve company information**
-- **Update existing company records**
-- **Delete company records**
-
-Refer to the API documentation or implemented endpoints in the source code for detailed usage instructions and available
-routes.
-
 ## Authentication
 
 The application uses JWT tokens for authentication. The tokens are generated when a user logs in to the application.
 The tokens are required to access all the routes.
 
+The application maintains a database of users and verifies the credentials provided by the user during the login process
+against the `users` table.
+
 In order to log in to the application, you need to send a POST request to the `/login` endpoint with the following
 payload:
-   
+
 ```json
 {
   "username": "admin",
@@ -126,14 +115,82 @@ For example with curl:
 
 The response will contain the JWT token that you can use to access the protected routes,
 For example:
+
 ```sh
     curl -X GET http://localhost:8080/api/v1/companies/some-uuid-id -H "Authorization: Bearer your_jwt_token_here"
 ```
 
-## Logging
+## Usage
 
-The application uses the built-in `log` package for logging. By default, the logs will be printed to the standard
-output.
+Once the application is running, you can interact with the API to perform operations on company records. Typical
+operations include:
+
+- **Login to the application to obtain a valid JWT token**
+
+`POST http://localhost:8080/login`
+
+Example:
+
+   ```shell
+   curl -X POST -v http://localhost:8080/login -d '{"username": "admin", "password": "admin"}'
+   ```
+
+- **Create a new company record**
+
+`POST http://localhost:8080/api/v1companies/create`
+
+Example:
+
+   ```shell
+   curl -X POST http://localhost:8080/companies/create \
+   -H "Authorization: Bearer your_jwt_token_here" \
+   -H "Content-Type: application/json" \
+   -d '{
+     "name": "Example Company",
+     "description": "This is an example company",
+     "employee_count" 100,
+     "registered": "true",
+     "company_type": "Corporations"
+   }'
+   ```
+
+- **Retrieve company information**
+
+`GET http://localhost:8080/api/v1/companies/{id}`
+
+Example:
+
+   ```shell
+       curl -X GET http://localhost:8080/api/v1/companies/some-uuid-id -H "Authorization: Bearer your jwt token here"
+   ```
+
+- **Update existing company records**
+  `PATCH http://localhost:8080/api/v1/companies/update`
+
+Example:
+
+   ```shell
+   curl -X PATCH http://localhost:8080/api/v1/companies/update \
+   -H "Authorization Bearer your jwt token here" \ 
+    -H "Content-Type: application/json" \
+    -d '{
+      "id": "some-uuid-id",
+      "name": "Example Company",
+      "description": "This is an example company",
+      "employee_count" 100,
+      "registered": "true",
+      "company_type": "Corporations"
+    }'
+  ```
+
+- **Delete company record**
+  `DELETE http://localhost:8080/api/v1/companies/delete/{id}`
+
+Example:
+
+   ```shell
+   curl -X DELETE http://localhost:8080/api/v1/companies/delete/some-uuid-id -H "Authorization Bearer your jwt token here"
+  ```
 
 ## Linting
 

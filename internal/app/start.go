@@ -20,18 +20,21 @@ func Run(cfg *config.Config) error {
 	// Initialize database
 	repo, err := repository.NewPostgresCompanyRepository(&cfg.DB)
 	if err != nil {
+		log.Println("Error connecting to the database: " + err.Error())
 		return err
 	}
 
 	// initialize Kafka producer
 	producer, err := kafka.NewMutationProducer(&cfg.Kafka)
 	if err != nil {
+		log.Println("Error creating Kafka producer: " + err.Error())
 		return err
 	}
 	producer.Start()
 
 	// Create Kafka topic
 	if err = kafka.CreateTopic(cfg.Kafka.Brokers, cfg.Kafka.Topic); err != nil {
+		log.Println("Error creating Kafka topic: " + err.Error())
 		return err
 	}
 
@@ -57,7 +60,7 @@ func Run(cfg *config.Config) error {
 
 	go func() {
 		if err = srv.ListenAndServe(); err != nil {
-			panic(err)
+			log.Fatalf("Server failed to start: %v", err)
 		}
 	}()
 
@@ -83,6 +86,7 @@ func gracefulShutdown(srv *http.Server, kp *kafka.Producer, waitTimeout int, tim
 
 	// Shutdown server
 	if err := srv.Shutdown(ctx); err != nil {
+		log.Println("Error shutting down server: " + err.Error())
 		return err
 	}
 	log.Println("Server gracefully stopped")

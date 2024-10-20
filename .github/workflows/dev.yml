@@ -55,7 +55,7 @@ jobs:
         ports:
           - 2181:2181
         options: >-
-          --health-cmd 'zookeeper-shell zookeeper:2181 ls /' 
+          --health-cmd 'echo ruok | nc -w 3 localhost 2181 || exit 1'
           --health-interval 10s 
           --health-timeout 5s 
           --health-retries 5

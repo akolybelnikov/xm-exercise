@@ -125,24 +125,14 @@ For example:
 Once the application is running, you can interact with the API to perform operations on company records. Typical
 operations include:
 
-- **Login to the application to obtain a valid JWT token**
-
-`POST http://localhost:8080/login`
-
-Example:
-
-   ```shell
-   curl -X POST -v http://localhost:8080/login -d '{"username": "admin", "password": "admin"}'
-   ```
-
 - **Create a new company record**
 
-`POST http://localhost:8080/api/v1companies/create`
+`POST http://localhost:8080/api/v1/companies/create`
 
 Example:
 
    ```shell
-   curl -X POST http://localhost:8080/companies/create \
+   curl -X POST http://localhost:8080/api/v1/companies/create \
    -H "Authorization: Bearer your_jwt_token_here" \
    -H "Content-Type: application/json" \
    -d '{

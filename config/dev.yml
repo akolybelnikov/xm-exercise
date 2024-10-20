@@ -6,7 +6,7 @@ app:
   secret: secret
   token_exp: 5
 kafka:
-  brokers: kafka:9092
+  brokers: kafka:9092,localhost:9092
   chan_size: 100
   flush_timeout: 10000
   topic: companies

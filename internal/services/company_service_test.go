@@ -23,6 +23,11 @@ type MockCompanyRepo struct {
 	mock.Mock
 }
 
+func (m *MockCompanyRepo) VerifyUser(_ context.Context, _, _ string) (*db.User, error) {
+	// TODO implement me
+	panic("implement me")
+}
+
 // GetCompanyByID retrieves a company by its ID from the repository using context and ID as parameters.
 func (m *MockCompanyRepo) GetCompanyByID(ctx context.Context, id string) (*db.Company, error) {
 	args := m.Called(ctx, id)

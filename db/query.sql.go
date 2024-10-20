@@ -98,3 +98,28 @@ func (q *Queries) UpdateCompany(ctx context.Context, arg UpdateCompanyParams) er
 	)
 	return err
 }
+
+const verifyUser = `-- name: VerifyUser :one
+SELECT id, username, password, email, company_id
+FROM users
+WHERE username = $1
+  AND password = crypt($2, password) LIMIT 1
+`
+
+type VerifyUserParams struct {
+	Username string
+	Crypt    string
+}
+
+func (q *Queries) VerifyUser(ctx context.Context, arg VerifyUserParams) (User, error) {
+	row := q.db.QueryRow(ctx, verifyUser, arg.Username, arg.Crypt)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Username,
+		&i.Password,
+		&i.Email,
+		&i.CompanyID,
+	)
+	return i, err
+}

@@ -16,3 +16,11 @@ type Company struct {
 	Registered    bool
 	Type          string
 }
+
+type User struct {
+	ID        int32
+	Username  string
+	Password  string
+	Email     string
+	CompanyID pgtype.UUID
+}

@@ -35,8 +35,16 @@ func Run(cfg *config.Config) error {
 		return err
 	}
 
+	routerCfg := &RouterConfig{
+		Producer: producer,
+		Repo:     repo,
+		Topic:    cfg.Kafka.Topic,
+		Secret:   cfg.App.Secret,
+		Exp:      cfg.App.TokenExp,
+	}
+
 	// Create router
-	r := NewRouter(producer, repo, cfg.Kafka.Topic)
+	r := NewRouter(routerCfg)
 
 	// Start server
 	srv := &http.Server{

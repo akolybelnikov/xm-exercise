@@ -20,3 +20,9 @@ WHERE id = $1;
 DELETE
 FROM company
 WHERE id = $1;
+
+-- name: VerifyUser :one
+SELECT *
+FROM users
+WHERE username = $1
+  AND password = crypt($2, password) LIMIT 1;

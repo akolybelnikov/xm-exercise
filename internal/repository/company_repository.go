@@ -16,6 +16,7 @@ type CompanyRepository interface {
 	CreateCompany(ctx context.Context, req *models.CreateRequest) (string, error)
 	UpdateCompany(ctx context.Context, req *models.UpdateRequest) error
 	DeleteCompany(ctx context.Context, id string) error
+	VerifyUser(ctx context.Context, username, password string) (*db.User, error)
 }
 
 // PostgresCompanyRepository is a Postgresql implementation of CompanyRepository using pgx.

@@ -20,6 +20,8 @@ type AppConfig struct {
 	Timeout     int    `mapstructure:"timeout"`
 	IdleTimeout int    `mapstructure:"idle_timeout"`
 	WaitTimeout int    `mapstructure:"wait_timeout"`
+	Secret      string `mapstructure:"secret"`
+	TokenExp    int    `mapstructure:"token_exp"`
 }
 
 // DBConfig holds the database configuration.

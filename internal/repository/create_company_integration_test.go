@@ -31,7 +31,7 @@ func setUpTestingDB(t *testing.T) (repository.CompanyRepository, func()) {
 
 	// create the table in the database
 	_, ddlErr := repo.Pool.Exec(ctx, `
-	DROP TABLE IF EXISTS company;	
+	DROP TABLE IF EXISTS company CASCADE;	
 	DROP EXTENSION IF EXISTS "uuid-ossp";
 	CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 	CREATE TABLE IF NOT EXISTS company (

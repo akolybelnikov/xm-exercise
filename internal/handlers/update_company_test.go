@@ -2,9 +2,13 @@ package handlers_test
 
 import (
 	"bytes"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/akolybelnikov/xm-exercise/internal/models"
+	"github.com/stretchr/testify/mock"
 
 	"github.com/akolybelnikov/xm-exercise/internal/handlers"
 )
@@ -25,7 +29,7 @@ func TestPatchRequest(t *testing.T) {
 				"registered": "true",
 				"company_type": "Corporations"
 			}`,
-			wantCode: http.StatusOK,
+			wantCode: http.StatusAccepted,
 		},
 		{
 			name:     "empty url",
@@ -69,6 +73,11 @@ func TestPatchRequest(t *testing.T) {
 			s := new(mockCompanyService)
 			h := handlers.NewHandler(s)
 			handler := http.HandlerFunc(h.Patch)
+
+			var ur models.UpdateRequest
+			_ = json.NewDecoder(bytes.NewBufferString(tt.input)).Decode(&ur)
+
+			s.On("UpdateCompany", mock.Anything, &ur).Return(nil)
 
 			handler.ServeHTTP(rec, req)
 

@@ -5,6 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/stretchr/testify/mock"
+
 	"github.com/go-chi/chi/v5"
 
 	"github.com/akolybelnikov/xm-exercise/internal/handlers"
@@ -33,6 +35,8 @@ func TestDeleteRequest(t *testing.T) {
 			h := handlers.NewHandler(s)
 			r := chi.NewRouter()
 			r.Delete("/delete/{id}", h.Delete)
+
+			s.On("DeleteCompany", mock.Anything, "123abc").Return(nil)
 
 			r.ServeHTTP(rec, req)
 

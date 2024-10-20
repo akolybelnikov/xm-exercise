@@ -3,8 +3,11 @@ package handlers_test
 import (
 	"bytes"
 	"context"
+	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/akolybelnikov/xm-exercise/db"
@@ -45,6 +48,8 @@ func TestCreateRequest(t *testing.T) {
 		name     string
 		input    string
 		wantCode int
+		id       string
+		err      error
 	}{
 		{
 			name: "CompleteValidRequest",
@@ -56,6 +61,8 @@ func TestCreateRequest(t *testing.T) {
 				"company_type":"Corporations"
 			}`,
 			wantCode: http.StatusCreated,
+			id:       "123",
+			err:      nil,
 		},
 		{
 			name: "CompleteValidRequestNoDescription",
@@ -66,6 +73,8 @@ func TestCreateRequest(t *testing.T) {
 				"company_type":"Corporations"
 			}`,
 			wantCode: http.StatusCreated,
+			id:       "123",
+			err:      nil,
 		},
 		{
 			name: "InvalidCompanyType",
@@ -77,6 +86,8 @@ func TestCreateRequest(t *testing.T) {
 				"company_type":"Invalid"
 			}`,
 			wantCode: http.StatusBadRequest,
+			id:       "",
+			err:      errors.New(http.StatusText(http.StatusBadRequest)),
 		},
 		{
 			name: "NameTooLong",
@@ -88,6 +99,8 @@ func TestCreateRequest(t *testing.T) {
 				"company_type":"Corporations"
 			}`,
 			wantCode: http.StatusBadRequest,
+			id:       "",
+			err:      errors.New(http.StatusText(http.StatusBadRequest)),
 		},
 		{
 			name: "NoNumEmployee_count",
@@ -97,6 +110,8 @@ func TestCreateRequest(t *testing.T) {
 				"company_type":"Corporations"
 			}`,
 			wantCode: http.StatusBadRequest,
+			id:       "",
+			err:      errors.New(http.StatusText(http.StatusBadRequest)),
 		},
 		{
 			name: "WrongNumEmployee_countType",
@@ -108,6 +123,8 @@ func TestCreateRequest(t *testing.T) {
 				"company_type":"Corporations"
 			}`,
 			wantCode: http.StatusBadRequest,
+			id:       "",
+			err:      errors.New(http.StatusText(http.StatusBadRequest)),
 		},
 	}
 
@@ -123,11 +140,27 @@ func TestCreateRequest(t *testing.T) {
 			h := handlers.NewHandler(s)
 			handler := http.HandlerFunc(h.Create)
 
+			var cr models.CreateRequest
+			_ = json.NewDecoder(bytes.NewBufferString(tt.input)).Decode(&cr)
+			s.On("CreateCompany", mock.Anything, &cr).Return(tt.id, tt.err)
+
 			handler.ServeHTTP(rec, req)
 
 			if status := rec.Code; status != tt.wantCode {
 				t.Errorf("handler returned wrong status code: got %v want %v",
 					status, tt.wantCode)
+			}
+
+			if tt.wantCode == http.StatusCreated {
+				if rec.Body.String() != tt.id {
+					t.Errorf("handler returned wrong body: got %v want %v",
+						rec.Body.String(), tt.id)
+				}
+			} else {
+				if !strings.Contains(rec.Body.String(), tt.err.Error()) {
+					t.Errorf("handler returned wrong body: got %v want %v",
+						rec.Body.String(), tt.err.Error())
+				}
 			}
 		})
 	}

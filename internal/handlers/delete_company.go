@@ -14,6 +14,13 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Delete company
+	err := h.service.DeleteCompany(r.Context(), id)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError)+": "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	// Return response
 	w.WriteHeader(http.StatusAccepted)
 }

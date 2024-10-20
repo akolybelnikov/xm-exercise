@@ -24,7 +24,7 @@ func Run(cfg *config.Config) error {
 	}
 
 	// initialize Kafka producer
-	producer, err := kafka.NewProducer(&cfg.Kafka)
+	producer, err := kafka.NewMutationProducer(&cfg.Kafka)
 	if err != nil {
 		return err
 	}

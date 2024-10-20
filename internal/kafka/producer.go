@@ -19,9 +19,11 @@ type Producer struct {
 	delivery chan kafka.Event
 }
 
-func NewProducer(cfg *config.KafkaConfig) (*Producer, error) {
+func NewMutationProducer(cfg *config.KafkaConfig) (*Producer, error) {
 	producer, err := kafka.NewProducer(&kafka.ConfigMap{
-		"bootstrap.servers": cfg.Brokers,
+		"bootstrap.servers":   cfg.Brokers,
+		"api.version.request": "true",      // Indicating to request broker api version if supported
+		"security.protocol":   "plaintext", // Using plaintext for simplicity
 	})
 	if err != nil {
 		return nil, err
@@ -43,6 +45,10 @@ func (p *Producer) Produce(topic string, key string, value string) error {
 		Key:            []byte(key),
 		Value:          []byte(value),
 	}, p.delivery)
+}
+
+func (p *Producer) Events() chan kafka.Event {
+	return p.producer.Events()
 }
 
 func (p *Producer) handleDeliveries() {
@@ -70,4 +76,8 @@ func (p *Producer) Close(timeout int) {
 	p.producer.Close()
 	close(p.errors)
 	close(p.delivery)
+}
+
+func (p *Producer) Flush(timeout int) {
+	p.producer.Flush(timeout)
 }

@@ -47,6 +47,32 @@ jobs:
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      zookeeper:
+        image: confluentinc/cp-zookeeper:latest
+        env:
+          ZOOKEEPER_CLIENT_PORT: 2181
+          ZOOKEEPER_TICK_TIME: 2000
+        ports:
+          - 2181:2181
+        options: >-
+          --health-cmd 'zookeeper-shell localhost:2181 ls /' 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
+      kafka:
+        image: confluentinc/cp-kafka:latest
+        env:
+          KAFKA_BROKER_ID: 1
+          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+        ports:
+          - 9092:9092
+        options: >-
+          --health-cmd 'kafka-broker-api-versions --bootstrap-server localhost:9092' 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -68,6 +94,16 @@ jobs:
       - name: Build
         run: |
           go build -o ./bin/app ./cmd
+
+      - name: Wait for Kafka to be ready
+        run: |
+          for i in {1..10}; do
+            if kafka-broker-api-versions --bootstrap-server localhost:9092; then
+              break
+            fi
+            echo "Kafka is not ready, waiting..."
+            sleep 5
+          done
 
       - name: Test
         run: |

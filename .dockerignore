@@ -1,5 +1,6 @@
 # Ignore .git directory
 .git
+.gitignore
 
 # Ignore Dockerfile itself
 Dockerfile
@@ -32,3 +33,4 @@ bin
 
 # Ignore other potential sensitive or temporary files
 .env
+*.md

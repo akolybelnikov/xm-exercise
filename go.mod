@@ -3,6 +3,7 @@ module github.com/akolybelnikov/xm-exercise
 go 1.23.2
 
 require (
+	github.com/confluentinc/confluent-kafka-go v1.9.2
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/go-chi/render v1.0.3
 	github.com/go-playground/validator/v10 v10.22.1

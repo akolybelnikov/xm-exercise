@@ -2,14 +2,15 @@ package app
 
 import (
 	"github.com/akolybelnikov/xm-exercise/internal/handlers"
+	"github.com/akolybelnikov/xm-exercise/internal/kafka"
 	"github.com/akolybelnikov/xm-exercise/internal/repository"
 	"github.com/akolybelnikov/xm-exercise/internal/services"
 	"github.com/go-chi/chi/v5"
 )
 
-func NewRouter(repo repository.CompanyRepository) *chi.Mux {
+func NewRouter(producer kafka.MutationProducer, repo repository.CompanyRepository, topic string) *chi.Mux {
 	r := chi.NewRouter()
-	s := services.NewCompanyDataService(repo)
+	s := services.NewCompanyDataService(producer, topic, repo)
 	h := handlers.NewHandler(s)
 
 	r.Route("/api/v1/companies", func(r chi.Router) {

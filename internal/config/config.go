@@ -9,8 +9,9 @@ import (
 
 // Config holds the application configuration.
 type Config struct {
-	App AppConfig
-	DB  DBConfig
+	App   AppConfig
+	DB    DBConfig
+	Kafka KafkaConfig
 }
 
 // AppConfig holds the application configuration.
@@ -29,6 +30,14 @@ type DBConfig struct {
 	Password string
 	Name     string
 	SSLMode  string
+}
+
+// KafkaConfig holds the Kafka configuration.
+type KafkaConfig struct {
+	Brokers      string
+	ChanSize     int
+	FlushTimeout int
+	Topic        string
 }
 
 func (db *DBConfig) GetDSN() string {

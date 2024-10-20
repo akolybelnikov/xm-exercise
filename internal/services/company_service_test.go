@@ -49,6 +49,22 @@ func (m *MockCompanyRepo) DeleteCompany(ctx context.Context, id string) error {
 	return m.Called(ctx, id).Error(0)
 }
 
+// Mock Kafka producer.
+type MockProducer struct {
+	mock.Mock
+}
+
+// Errors returns a channel to receive errors from the Kafka producer.
+func (m *MockProducer) Errors() {
+	m.Called()
+}
+
+// Produce sends a message to the Kafka topic.
+func (m *MockProducer) Produce(topic string, key string, value string) error {
+	args := m.Called(topic, key, value)
+	return args.Error(0)
+}
+
 // TestCompanyByID verifies the functionality of retrieving company details by ID using different test cases.
 func TestCompanyByID(t *testing.T) {
 	// Create a new UUID.
@@ -91,10 +107,7 @@ func TestCompanyByID(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			// MockCompanyRepo is a mock implementation of the CompanyRepository interface.
-			m := new(MockCompanyRepo)
-			// NewCompanyDataService creates a new CompanyDataService.
-			s := services.NewCompanyDataService(m)
+			s, m, _ := setupService()
 			m.On("GetCompanyByID", mock.Anything, test.id).Return(test.result, test.err)
 			resp, err2 := s.GetCompanyByID(context.Background(), test.id)
 			assert.Equal(t, test.result, resp)
@@ -134,11 +147,9 @@ func TestCreateCompany(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			// MockCompanyRepo is a mock implementation of the CompanyRepository interface.
-			m := new(MockCompanyRepo)
-			// NewCompanyDataService creates a new CompanyDataService.
-			s := services.NewCompanyDataService(m)
+			s, m, p := setupService()
 			m.On("CreateCompany", mock.Anything, test.req).Return(test.id, test.err)
+			p.On("Produce", mock.Anything, test.id, "CREATE").Return(test.err)
 			resp, err := s.CreateCompany(context.Background(), test.req)
 			assert.Equal(t, test.id, resp)
 			assert.Equal(t, test.err, err)
@@ -168,11 +179,13 @@ func TestUpdateCompany(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			// MockCompanyRepo is a mock implementation of the CompanyRepository interface.
-			m := new(MockCompanyRepo)
-			// NewCompanyDataService creates a new CompanyDataService.
-			s := services.NewCompanyDataService(m)
+			s, m, p := setupService()
 			m.On("UpdateCompany", mock.Anything, test.req).Return(test.err)
+			if test.err == nil {
+				p.On("Produce", mock.Anything, test.req.ID, "UPDATE").Return(nil)
+			} else {
+				p.On("Produce", mock.Anything, nil, nil).Return(test.err)
+			}
 			err := s.UpdateCompany(context.Background(), test.req)
 			assert.Equal(t, test.err, err)
 			m.AssertExpectations(t)
@@ -193,14 +206,19 @@ func TestDeleteCompany(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			// MockCompanyRepo is a mock implementation of the CompanyRepository interface.
-			m := new(MockCompanyRepo)
-			// NewCompanyDataService creates a new CompanyDataService.
-			s := services.NewCompanyDataService(m)
+			s, m, p := setupService()
 			m.On("DeleteCompany", mock.Anything, test.id).Return(test.err)
+			p.On("Produce", mock.Anything, test.id, "DELETE").Return(test.err)
 			err := s.DeleteCompany(context.Background(), test.id)
 			assert.Equal(t, test.err, err)
 			m.AssertExpectations(t)
 		})
 	}
+}
+
+func setupService() (*services.CompanyDataService, *MockCompanyRepo, *MockProducer) {
+	m := new(MockCompanyRepo)
+	p := new(MockProducer)
+	topic := "test"
+	return services.NewCompanyDataService(p, topic, m), m, p
 }

@@ -9,20 +9,34 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/akolybelnikov/xm-exercise/internal/kafka"
 	"github.com/akolybelnikov/xm-exercise/internal/repository"
 
 	"github.com/akolybelnikov/xm-exercise/internal/config"
 )
 
 func Run(cfg *config.Config) error {
+	var err error
 	// Initialize database
-	repo, dbErr := repository.NewPostgresCompanyRepository(&cfg.DB)
-	if dbErr != nil {
-		return dbErr
+	repo, err := repository.NewPostgresCompanyRepository(&cfg.DB)
+	if err != nil {
+		return err
+	}
+
+	// initialize Kafka producer
+	producer, err := kafka.NewProducer(&cfg.Kafka)
+	if err != nil {
+		return err
+	}
+	producer.Start()
+
+	// Create Kafka topic
+	if err = kafka.CreateTopic(cfg.Kafka.Brokers, cfg.Kafka.Topic); err != nil {
+		return err
 	}
 
 	// Create router
-	r := NewRouter(repo)
+	r := NewRouter(producer, repo, cfg.Kafka.Topic)
 
 	// Start server
 	srv := &http.Server{
@@ -34,7 +48,7 @@ func Run(cfg *config.Config) error {
 	}
 
 	go func() {
-		if err := srv.ListenAndServe(); err != nil {
+		if err = srv.ListenAndServe(); err != nil {
 			panic(err)
 		}
 	}()
@@ -42,10 +56,10 @@ func Run(cfg *config.Config) error {
 	log.Println("Server started on port " + cfg.App.Port)
 
 	// Graceful shutdown
-	return gracefulShutdown(srv, cfg.App.WaitTimeout)
+	return gracefulShutdown(srv, producer, cfg.App.WaitTimeout, cfg.Kafka.FlushTimeout)
 }
 
-func gracefulShutdown(srv *http.Server, waitTimeout int) error {
+func gracefulShutdown(srv *http.Server, kp *kafka.Producer, waitTimeout int, timeout int) error {
 	quit := make(chan os.Signal, 1)
 
 	// Listen for interrupt signals
@@ -63,7 +77,11 @@ func gracefulShutdown(srv *http.Server, waitTimeout int) error {
 	if err := srv.Shutdown(ctx); err != nil {
 		return err
 	}
-
 	log.Println("Server gracefully stopped")
+
+	// Close Kafka producer
+	kp.Close(timeout)
+	log.Println("Kafka producer closed")
+
 	return nil
 }

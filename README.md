@@ -53,13 +53,6 @@ committed to the repository and must be created manually.
     ```
 
    This will run the linter to enforce coding standards.
-3. **Clean up the project:**
-
-    ```sh
-    make clean
-    ```
-
-   This will remove the project build.
 
 ## Running the Project with Docker Compose
 
@@ -101,6 +94,7 @@ The application will be accessible at `http://localhost:8080`. The Postgres data
 Once the application is running, you can interact with the API to perform operations on company records. Typical
 operations include:
 
+- **Login to the application to obtain a valid JWT token**
 - **Create a new company record**
 - **Retrieve company information**
 - **Update existing company records**
@@ -108,6 +102,33 @@ operations include:
 
 Refer to the API documentation or implemented endpoints in the source code for detailed usage instructions and available
 routes.
+
+## Authentication
+
+The application uses JWT tokens for authentication. The tokens are generated when a user logs in to the application.
+The tokens are required to access all the routes.
+
+In order to log in to the application, you need to send a POST request to the `/login` endpoint with the following
+payload:
+   
+```json
+{
+  "username": "admin",
+  "password": "admin"
+}
+```
+
+For example with curl:
+
+ ```sh
+    curl -X POST -v http://localhost:8080/login -d '{"username": "admin", "password": "admin"}'
+ ```
+
+The response will contain the JWT token that you can use to access the protected routes,
+For example:
+```sh
+    curl -X GET http://localhost:8080/api/v1/companies/some-uuid-id -H "Authorization: Bearer your_jwt_token_here"
+```
 
 ## Logging
 

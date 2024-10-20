@@ -75,7 +75,7 @@ func TestProducer_Close(t *testing.T) {
 	t.Log("Producer closed")
 }
 
-//func TestKafkaProducer(t *testing.T) {
+// func TestKafkaProducer(t *testing.T) {
 //	p, err := kafka.NewMutationProducer(&config.KafkaConfig{
 //		Brokers:  "localhost:29092",
 //		ChanSize: 1,
